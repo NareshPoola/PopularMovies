@@ -10,5 +10,5 @@ In order to access themoviedb.org API an API key is required. It is required to 
  
  Screens
  ---------
- ![alt tag](https://www.dropbox.com/s/yykw051snzja1ez/movie_home.png)
- ![alt tag](https://www.dropbox.com/home?preview=movie_details.png)
+ ![alt tag](https://www.dropbox.com/s/yykw051snzja1ez/movie_home.png?dl=0)
+ ![alt tag](https://www.dropbox.com/s/1atl9mfrevrkild/movie_details.png?dl=0)
