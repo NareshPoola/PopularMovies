@@ -10,5 +10,5 @@ In order to access themoviedb.org API an API key is required. It is required to 
  
  Screens
  ---------
- ![alt tag](http://postimg.org/image/tkd209f2v/)
+ ![alt tag](http://s31.postimg.org/ekbz4b0d7/movie_home.png)
  ![alt tag](https://www.dropbox.com/s/1atl9mfrevrkild/movie_details.png?dl=0)
