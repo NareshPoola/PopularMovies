@@ -4,11 +4,11 @@ For information in regards to project requirement, technical decisions made and 
 project wiki
 
 ## Api key
-In order to access themoviedb.org API an API key is required. It is required to add *add_tmdb_movie_key_here* in build.gradel file in order to add a valid api key. 
+In order to access themoviedb.org API an API key is required. It is required to add *add_tmdb_movie_key_here* in build.gradel file 
 
  it.buildConfigField 'String', 'MOVIE_API_KEY', '"add_tmdb_movie_key_here"'
  
  Screens
  ---------
- ![alt tag](https://www.dropbox.com/s/yykw051snzja1ez/movie_home.png?dl=0)
+ ![alt tag](http://s31.postimg.org/j0be6erh3/movie_home.jpg?noCache=1461092334)
  ![alt tag](https://www.dropbox.com/s/1atl9mfrevrkild/movie_details.png?dl=0)
