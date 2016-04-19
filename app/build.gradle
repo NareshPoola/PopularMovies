@@ -19,7 +19,7 @@ android {
     }
 
     buildTypes.each {
-        it.buildConfigField 'String', 'MOVIE_API_KEY', '"4dcdd0ead54ce379637d3dd773d42dc0"'
+        it.buildConfigField 'String', 'MOVIE_API_KEY', '"add_tmdb_movie_key_here"'
         it.buildConfigField 'String', 'IMAGE_BASE_URL_342', '"http://image.tmdb.org/t/p/w342/"'
         it.buildConfigField 'String', 'IMAGE_BASE_URL_500', '"http://image.tmdb.org/t/p/w500/"'
         it.buildConfigField 'String', 'ORIGINAL_IMAGE_BASE_URL', '"http://image.tmdb.org/t/p/w342/"'
