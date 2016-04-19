@@ -1,0 +1,12 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/match_match"
+    android:padding="@dimen/dimen_8"
+    tools:context="com.sample.popularmovies.MoviesActivityFragment"
+    tools:showIn="@layout/activity_movies">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/movies_recycler_view"
+        style="@style/match_match" />
+
+</RelativeLayout>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/match_match"
+    android:fitsSystemWindows="true"
+    tools:context="com.sample.popularmovies.MoviesActivity">
+
+    <android.support.design.widget.AppBarLayout
+        style="@style/match_wrap"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            style="@style/HeaderTitleStyle"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:title="@string/app_name"
+            android:titleTextColor="@android:color/white"
+            app:popupTheme="@style/AppTheme.PopupOverlay">
+
+            <TextView
+                android:id="@+id/toolbar_title"
+                style="@style/match_wrap"
+                android:fontFamily="sans-serif-condensed"
+                android:gravity="left"
+                android:text="@string/popular_movies"
+                android:textColor="@android:color/white"
+                android:textSize="22sp" />
+
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <include layout="@layout/content_movies" />
+
+</android.support.design.widget.CoordinatorLayout>

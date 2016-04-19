@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">PopularMovies</string>
+    <string name="popular_movies">Most Popular Movies</string>
+    <string name="top_rated_movies">Highest Rated Movies</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_popular_movies">Most Popular</string>
+    <string name="action_top_rated_movies">Highest Rated</string>
+    <string name="transition_string">image_view_share</string>
+
+    <string name="format_title">%1s/10 - TMDb</string>
+    <string name="format_vote_avg">%1s/10 - TMDb</string>
+    <string name="format_release_date">Initial Release: %1s</string>
+</resources>
