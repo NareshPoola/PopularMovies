@@ -12,5 +12,9 @@
     <dimen name="textsize_18">18sp</dimen>
     <dimen name="dimen_60">60dp</dimen>
     <dimen name="video_play_circle_width">60dp</dimen>
-    <dimen name="collapsing_toolbar_height">225dp</dimen>
+    <dimen name="video_play_circle_min_width">30dp</dimen>
+    <dimen name="collapsing_toolbar_height">240dp</dimen>
+    <dimen name="video_height">120dp</dimen>
+    <dimen name="video_width">160.dp</dimen>
+    <dimen name="dimen_2">2dp</dimen>
 </resources>

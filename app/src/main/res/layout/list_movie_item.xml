@@ -17,14 +17,16 @@
             android:id="@+id/movie_image"
             style="@style/match_wrap"
             android:layout_centerHorizontal="true"
-            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
+            android:scaleType="fitStart"
             android:transitionName="@string/transition_string" />
 
         <TextView
             android:id="@+id/movie_name"
             style="@style/match_wrap"
-            android:layout_below="@+id/movie_image"
+            android:layout_alignParentBottom="true"
             android:ellipsize="end"
+            android:layout_below="@+id/movie_image"
             android:fontFamily="sans-serif-condensed"
             android:gravity="center"
             android:maxLines="1"

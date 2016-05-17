@@ -1,5 +1,6 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     style="@style/match_match">
 
     <android.support.design.widget.AppBarLayout
@@ -9,6 +10,7 @@
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/collapsing_toolbar"
             style="@style/match_match"
+            android:onClick="onClick"
             app:collapsedTitleTextAppearance="@style/TextAppearance.Collapsed"
             app:contentScrim="?attr/colorPrimary"
             app:expandedTitleTextAppearance="@style/HeaderTitleStyle"
@@ -16,29 +18,7 @@
             app:title="MAD MAX"
             app:titleTextColor="@android:color/white">
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/collapsing_toolbar_height"
-                app:layout_collapseMode="parallax"
-                app:layout_collapseParallaxMultiplier="0.7">
-
-                <ImageView
-                    android:id="@+id/movie_image_banner"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/collapsing_toolbar_height"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/beach_scene" />
-
-                <ImageView
-                    android:layout_width="@dimen/video_play_circle_width"
-                    android:layout_height="@dimen/video_play_circle_width"
-                    android:layout_centerInParent="true"
-                    android:background="@drawable/video_play_circle"
-                    android:scaleType="centerInside"
-                    android:src="@drawable/video_play" />
-
-            </RelativeLayout>
-
+            <include layout="@layout/content_movie_details_header" />
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -56,55 +36,17 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v4.widget.NestedScrollView
-        style="@style/match_match"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+    <include layout="@layout/content_movies_details" />
 
-
-        <RelativeLayout
-            style="@style/match_wrap"
-            android:padding="@dimen/dimen_10">
-
-            <ImageView
-                android:id="@+id/movie_image"
-                style="@style/wrap_wrap"
-                android:scaleType="fitCenter"
-                android:transitionName="@string/transition_string" />
-
-            <TextView
-                android:id="@+id/movie_released_date"
-                style="@style/match_wrap"
-                android:layout_toRightOf="@+id/movie_image"
-                android:fontFamily="sans-serif-condensed"
-                android:gravity="left"
-                android:paddingLeft="@dimen/dimen_10"
-                android:textColor="@color/colorPrimaryText"
-                android:textSize="@dimen/textsize_18" />
-
-            <TextView
-                android:id="@+id/movie_vote_avg"
-                style="@style/match_wrap"
-                android:layout_below="@+id/movie_released_date"
-                android:layout_toRightOf="@+id/movie_image"
-                android:fontFamily="sans-serif-condensed"
-                android:gravity="left"
-                android:paddingLeft="@dimen/dimen_10"
-                android:textColor="@color/colorPrimaryText"
-                android:textSize="@dimen/textsize_18" />
-
-            <TextView
-                android:id="@+id/movie_overview"
-                style="@style/match_wrap"
-                android:layout_below="@+id/movie_image"
-                android:fontFamily="sans-serif-condensed"
-                android:gravity="left"
-                android:paddingBottom="@dimen/dimen_10"
-                android:paddingTop="@dimen/dimen_10"
-                android:textColor="@color/colorPrimaryText"
-                android:textSize="@dimen/textsize_16" />
-
-        </RelativeLayout>
-
-    </android.support.v4.widget.NestedScrollView>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onClick"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@drawable/icon_unfavourite" />
 
 </android.support.design.widget.CoordinatorLayout>

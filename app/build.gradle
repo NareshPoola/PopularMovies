@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.neenbedankt.android-apt'
 
 android {
     compileSdkVersion 23
@@ -11,6 +12,13 @@ android {
         versionCode 1
         versionName "1.0"
     }
+
+    buildscript {
+        repositories {
+            mavenCentral()
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -20,12 +28,14 @@ android {
 
     buildTypes.each {
         it.buildConfigField 'String', 'MOVIE_API_KEY', '"add_tmdb_movie_key_here"'
+        it.buildConfigField 'String', 'IMAGE_BASE_URL_185', '"http://image.tmdb.org/t/p/w185/"'
         it.buildConfigField 'String', 'IMAGE_BASE_URL_342', '"http://image.tmdb.org/t/p/w342/"'
         it.buildConfigField 'String', 'IMAGE_BASE_URL_500', '"http://image.tmdb.org/t/p/w500/"'
         it.buildConfigField 'String', 'ORIGINAL_IMAGE_BASE_URL', '"http://image.tmdb.org/t/p/w342/"'
         it.buildConfigField 'String', 'TMDB_SERVER_BASE_URL', '"http://api.themoviedb.org/3"'
     }
 }
+
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
@@ -36,4 +46,8 @@ dependencies {
     compile 'com.squareup.retrofit:retrofit:1.9.0'
     compile 'com.squareup.okhttp:okhttp:2.4.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.android.support:palette-v7:23.0.+'
+    compile 'com.jakewharton:butterknife:8.0.0'
+    apt 'com.jakewharton:butterknife-compiler:8.0.0'
+
 }

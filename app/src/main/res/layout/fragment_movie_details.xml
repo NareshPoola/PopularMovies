@@ -1,0 +1,140 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/match_match"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    <android.support.v4.widget.NestedScrollView style="@style/match_match">
+
+        <RelativeLayout style="@style/match_wrap">
+
+            <LinearLayout
+                android:id="@+id/content_movie_details_header"
+                style="@style/match_wrap"
+                android:padding="@dimen/dimen_10"
+                android:visibility="gone">
+
+                <include layout="@layout/content_movie_details_header" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/content_movie_details"
+                style="@style/match_wrap"
+                android:layout_below="@+id/content_movie_details_header"
+                android:padding="@dimen/dimen_10">
+
+                <ImageView
+                    android:id="@+id/movie_image"
+                    style="@style/wrap_wrap"
+                    android:scaleType="fitCenter"
+                    android:transitionName="@string/transition_string" />
+
+                <TextView
+                    android:id="@+id/movie_released_date"
+                    style="@style/match_wrap"
+                    android:layout_toRightOf="@+id/movie_image"
+                    android:fontFamily="sans-serif-condensed"
+                    android:gravity="left"
+                    android:paddingLeft="@dimen/dimen_10"
+                    android:textColor="@color/colorPrimaryText"
+                    android:textSize="@dimen/textsize_18" />
+
+                <TextView
+                    android:id="@+id/movie_vote_avg"
+                    style="@style/match_wrap"
+                    android:layout_below="@+id/movie_released_date"
+                    android:layout_toRightOf="@+id/movie_image"
+                    android:fontFamily="sans-serif-condensed"
+                    android:gravity="left"
+                    android:paddingLeft="@dimen/dimen_10"
+                    android:textColor="@color/colorPrimaryText"
+                    android:textSize="@dimen/textsize_18" />
+
+                <TextView
+                    android:id="@+id/movie_overview"
+                    style="@style/match_wrap"
+                    android:layout_below="@+id/movie_image"
+                    android:fontFamily="sans-serif-condensed"
+                    android:gravity="left"
+                    android:paddingBottom="@dimen/dimen_10"
+                    android:paddingTop="@dimen/dimen_10"
+                    android:textColor="@color/colorPrimaryText"
+                    android:textSize="@dimen/textsize_16" />
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/trailers_view_layout"
+                style="@style/match_wrap"
+                android:layout_below="@+id/content_movie_details"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    style="@style/match_wrap"
+                    android:fontFamily="sans-serif-condensed"
+                    android:gravity="left"
+                    android:padding="@dimen/dimen_10"
+                    android:text="@string/trailers"
+                    android:textColor="@color/colorPrimaryText"
+                    android:textSize="@dimen/textsize_22"
+                    android:textStyle="bold" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/movies_video_recycler_view"
+                    style="@style/match_match" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/reviews_view_layout"
+                style="@style/match_wrap"
+                android:layout_below="@+id/trailers_view_layout"
+                android:orientation="vertical"
+                android:padding="@dimen/dimen_10"
+                android:visibility="gone">
+
+                <TextView
+                    style="@style/match_wrap"
+                    android:fontFamily="sans-serif-condensed"
+                    android:gravity="left"
+                    android:paddingBottom="@dimen/dimen_10"
+                    android:paddingTop="@dimen/dimen_10"
+                    android:text="@string/reviews"
+                    android:textColor="@color/colorPrimaryText"
+                    android:textSize="@dimen/textsize_22"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:id="@+id/dynamic_reviews_layout"
+                    style="@style/match_wrap"
+                    android:orientation="vertical">
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/view_see_all_reviews"
+                    style="@style/match_wrap"
+                    android:fontFamily="sans-serif-condensed"
+                    android:gravity="center"
+                    android:padding="@dimen/dimen_10"
+                    android:text="@string/see_all_reviews"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/textsize_18"
+                    android:visibility="gone" />
+
+            </LinearLayout>
+        </RelativeLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:onClick="fabClick"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@drawable/icon_unfavourite" />
+</RelativeLayout>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    style="@style/wrap_wrap"
+    android:padding="@dimen/dimen_5"
+    android:background="?android:selectableItemBackground">
+
+    <ImageView
+        android:id="@+id/movie_trailer_image"
+        android:layout_height="@dimen/video_height"
+        android:layout_width="@dimen/video_width"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/placeholder"
+        android:scaleType="fitCenter"
+        android:transitionName="@string/transition_string" />
+
+    <ImageView
+        android:layout_width="@dimen/video_play_circle_min_width"
+        android:layout_height="@dimen/video_play_circle_min_width"
+        android:layout_centerInParent="true"
+        android:background="@drawable/video_play_circle"
+        android:scaleType="centerInside"
+        android:src="@drawable/video_play_small" />
+</RelativeLayout>
+

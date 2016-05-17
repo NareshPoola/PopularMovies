@@ -6,6 +6,17 @@
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowContentTransitions">true</item>
+        <!-- specify enter and exit transitions -->
+        <!-- options are: explode, slide, fade -->
+        <item name="android:windowEnterTransition">@transition/change_view_transform</item>
+        <item name="android:windowExitTransition">@transition/change_view_transform</item>
+
+        <!-- specify shared element transitions -->
+        <item name="android:windowSharedElementEnterTransition">
+            @transition/change_view_transform</item>
+        <item name="android:windowSharedElementExitTransition">
+            @transition/change_view_transform</item>
     </style>
 
     <style name="HeaderTitleStyle" parent="@android:style/TextAppearance">

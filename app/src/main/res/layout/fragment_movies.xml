@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/match_match"
     android:padding="@dimen/dimen_8"
-    tools:context="com.sample.popularmovies.MoviesActivityFragment"
+    tools:context=".app.MoviesFragment"
     tools:showIn="@layout/activity_movies">
 
     <android.support.v7.widget.RecyclerView

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/match_match"
     android:fitsSystemWindows="true"
-    tools:context=".app.MoviesActivity">
+    tools:context=".app.ReviewDetailsActivity">
 
     <android.support.design.widget.AppBarLayout
         style="@style/match_wrap"
@@ -25,7 +25,7 @@
                 style="@style/match_wrap"
                 android:fontFamily="sans-serif-condensed"
                 android:gravity="left"
-                android:text="@string/popular_movies"
+                android:text="@string/review"
                 android:textColor="@android:color/white"
                 android:textSize="22sp" />
 
@@ -33,6 +33,10 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_movies" />
+    <FrameLayout
+        android:id="@+id/review_details_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 </android.support.design.widget.CoordinatorLayout>

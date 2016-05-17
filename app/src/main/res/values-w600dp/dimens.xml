@@ -1,6 +1,6 @@
 <resources>
     <dimen name="activity_horizontal_margin">64dp</dimen>
-    <dimen name="collapsing_toolbar_height">300dp</dimen>
+    <dimen name="collapsing_toolbar_height">240dp</dimen>
     <dimen name="video_play_circle_min_width">45dp</dimen>
     <dimen name="video_height">180dp</dimen>
     <dimen name="video_width">240dp</dimen>

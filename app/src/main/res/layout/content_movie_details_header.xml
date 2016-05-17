@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/collapsing_toolbar_height"
+    app:layout_collapseMode="parallax"
+    app:layout_collapseParallaxMultiplier="0.7">
+
+    <ImageView
+        android:id="@+id/movie_image_banner"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/collapsing_toolbar_height"
+        android:scaleType="centerCrop"
+        android:src="@drawable/beach_scene" />
+
+    <ImageView
+        android:layout_width="@dimen/video_play_circle_width"
+        android:layout_height="@dimen/video_play_circle_width"
+        android:layout_centerInParent="true"
+        android:background="@drawable/video_play_circle"
+        android:scaleType="centerInside"
+        android:src="@drawable/video_play" />
+
+</RelativeLayout>
