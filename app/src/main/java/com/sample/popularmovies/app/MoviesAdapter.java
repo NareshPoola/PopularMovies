@@ -55,11 +55,11 @@ public class MoviesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         @BindView(R.id.movie_image)
         public ImageView mImage;
         @BindView(R.id.movie_card_view)
-        private CardView mCardView;
+        public CardView mCardView;
 
         public MovieViewHolder(View view) {
             super(view);
-            ButterKnife.bind(mContext, view);
+            ButterKnife.bind(this, view);
             mCardView.setOnClickListener(onClickListener);
         }
     }

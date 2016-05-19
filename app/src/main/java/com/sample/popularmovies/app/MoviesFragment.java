@@ -48,7 +48,7 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
     private boolean isLoading;
 
     @BindView(R.id.movies_recycler_view)
-    private RecyclerView mMoviesRecyclerView;
+    public RecyclerView mMoviesRecyclerView;
     private View rootView;
     private GridLayoutManager gridLayoutManager;
     private MoviesAdapter moviesAdapter;
@@ -210,7 +210,7 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
 
 
     public void init() {
-        ButterKnife.bind(getActivity(), rootView);
+        ButterKnife.bind(this, rootView);
         initViews();
         initListeners();
         initObjects();

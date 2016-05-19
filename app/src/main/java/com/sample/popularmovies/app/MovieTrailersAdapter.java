@@ -40,7 +40,7 @@ public class MovieTrailersAdapter extends RecyclerView.Adapter<RecyclerView.View
 
         public MovieTrailerViewHolder(View view) {
             super(view);
-            ButterKnife.bind(mContext, view);
+            ButterKnife.bind(this, view);
             mImage.setOnClickListener(onClickListener);
         }
     }
