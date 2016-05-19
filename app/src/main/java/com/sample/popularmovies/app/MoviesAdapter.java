@@ -18,6 +18,9 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by naresh poola on 15/4/16.
  */
@@ -37,24 +40,26 @@ public class MoviesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
 
     public class LoadingViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.progressBar1)
         public ProgressBar progressBar;
 
         public LoadingViewHolder(View itemView) {
             super(itemView);
-            progressBar = (ProgressBar) itemView.findViewById(R.id.progressBar1);
+            ButterKnife.bind(mContext, itemView);
         }
     }
 
     public class MovieViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.movie_name)
         public TextView mTitle;
+        @BindView(R.id.movie_image)
         public ImageView mImage;
+        @BindView(R.id.movie_card_view)
         private CardView mCardView;
 
         public MovieViewHolder(View view) {
             super(view);
-            mCardView = (CardView) view.findViewById(R.id.movie_card_view);
-            mTitle = (TextView) view.findViewById(R.id.movie_name);
-            mImage = (ImageView) view.findViewById(R.id.movie_image);
+            ButterKnife.bind(mContext, view);
             mCardView.setOnClickListener(onClickListener);
         }
     }

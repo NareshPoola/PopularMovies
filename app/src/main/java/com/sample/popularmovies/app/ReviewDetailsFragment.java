@@ -15,9 +15,7 @@ import com.sample.popularmovies.utils.AppConstants;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-/**
- * A placeholder fragment containing a simple view.
- */
+
 public class ReviewDetailsFragment extends Fragment implements AppConstants {
 
 

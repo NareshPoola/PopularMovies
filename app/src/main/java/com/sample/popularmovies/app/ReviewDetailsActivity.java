@@ -25,7 +25,6 @@ public class ReviewDetailsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_review_details);
         ButterKnife.bind(this);
-        ButterKnife.bind(this);
         setSupportActionBar(mToolbar);
         setBackNavigationIcon();
         if (savedInstanceState == null) {

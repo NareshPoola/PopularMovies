@@ -31,6 +31,8 @@ import com.sample.popularmovies.utils.AppConstants;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -45,9 +47,9 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
     private int totalItemCount;
     private boolean isLoading;
 
-
-    private View rootView;
+    @BindView(R.id.movies_recycler_view)
     private RecyclerView mMoviesRecyclerView;
+    private View rootView;
     private GridLayoutManager gridLayoutManager;
     private MoviesAdapter moviesAdapter;
     private int pageNumber = 1;
@@ -208,6 +210,7 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
 
 
     public void init() {
+        ButterKnife.bind(getActivity(), rootView);
         initViews();
         initListeners();
         initObjects();
@@ -219,7 +222,6 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
      * Initializing views
      */
     private void initViews() {
-        mMoviesRecyclerView = (RecyclerView) rootView.findViewById(R.id.movies_recycler_view);
         gridLayoutManager = new GridLayoutManager(getActivity(), 2);
         mMoviesRecyclerView.setLayoutManager(gridLayoutManager);
         mMoviesRecyclerView.setItemAnimator(new DefaultItemAnimator());

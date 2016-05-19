@@ -190,9 +190,6 @@ public class MovieDetailsFragment extends Fragment implements AppConstants {
             @Override
             public void success(final Reviews reviews, Response response) {
                 if (reviews.getResults().size() > 0) {
-//                    if (reviews.getResults().size() > 3) {
-//                        mAllReviews.setVisibility(View.VISIBLE);
-//                    }
                     mDynamicReviewsLayout.removeAllViews();
                     mReviewsViewLayout.setVisibility(View.VISIBLE);
                     if (getActivity() != null) {
@@ -248,23 +245,11 @@ public class MovieDetailsFragment extends Fragment implements AppConstants {
     View.OnClickListener reviewSelectedListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-           /* ReviewDetailsFragment reviewDetailsFragment = new ReviewDetailsFragment();
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                Transition changeTransform = TransitionInflater.from(getActivity()).
-                        inflateTransition(R.transition.change_view_transform);
-                Transition fadeTransform = TransitionInflater.from(getActivity()).
-                        inflateTransition(android.R.transition.slide_top);
-                setSharedElementReturnTransition(changeTransform);
-                setExitTransition(fadeTransform);
-
-                reviewDetailsFragment.setSharedElementEnterTransition(changeTransform);
-                reviewDetailsFragment.setEnterTransition(fadeTransform);
-            }*/
             com.sample.popularmovies.services.models.reviewapi.Result result = (com.sample.popularmovies.services.models.reviewapi.Result) v.getTag();
             Intent intent = new Intent(getActivity(), ReviewDetailsActivity.class);
             intent.putExtra(IBundleParams.RESULT_OBJ, (Serializable) result);
-            View name = (TextView) v.findViewById(R.id.reviewer_name);
-            View desc = (TextView) v.findViewById(R.id.review_description);
+            View name =  v.findViewById(R.id.reviewer_name);
+            View desc =  v.findViewById(R.id.review_description);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 Pair<View, String> pair1 = Pair.create(name, name.getTransitionName());
                 Pair<View, String> pair2 = Pair.create(desc, desc.getTransitionName());
@@ -275,18 +260,7 @@ public class MovieDetailsFragment extends Fragment implements AppConstants {
             } else {
                 startActivity(intent);
             }
-            /*TextView name = (TextView) v.findViewById(R.id.reviewer_name);
-            TextView desc = (TextView) v.findViewById(R.id.review_description);
-            Bundle bundle = new Bundle();
 
-            bundle.putSerializable(IBundleParams.RESULT_OBJ, (Serializable) result);
-            reviewDetailsFragment.setArguments(bundle);
-            getActivity().getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.movie_details_container, reviewDetailsFragment)
-                    .addToBackStack("")
-                    .addSharedElement(name, getString(R.string.transition_name))
-                    .addSharedElement(desc, getString(R.string.transition_desc))
-                    .commit();*/
         }
     };
 
