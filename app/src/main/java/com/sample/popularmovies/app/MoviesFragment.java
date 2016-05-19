@@ -1,10 +1,15 @@
 package com.sample.popularmovies.app;
 
 import android.app.Activity;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,6 +23,7 @@ import android.view.ViewGroup;
 
 import com.sample.popularmovies.R;
 import com.sample.popularmovies.services.RestInterface;
+import com.sample.popularmovies.services.databases.MoviesContract;
 import com.sample.popularmovies.services.models.movieapi.Movies;
 import com.sample.popularmovies.services.models.movieapi.Result;
 import com.sample.popularmovies.utils.AppConstants;
@@ -32,7 +38,7 @@ import retrofit.client.Response;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MoviesFragment extends Fragment implements AppConstants {
+public class MoviesFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, AppConstants {
 
     private int visibleThreshold = 5;
     private int lastVisibleItem;
@@ -54,6 +60,30 @@ public class MoviesFragment extends Fragment implements AppConstants {
     private List<Result> moviesList = new ArrayList<>();
     private OnMovieSelectListener onMovieSelectListener;
     private boolean isFavoriteMoviesLoaded = false;
+    private List<Result> favouriteMovies = null;
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        Uri CONTENT_URI = MoviesContract.MovieEntry.CONTENT_URI;
+        return new CursorLoader(getActivity(), CONTENT_URI, null, null, null, null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        favouriteMovies = FavoriteMoviesManager.create(getActivity()).getAllFavoriteMovies(data);
+        if (isFavoriteMoviesLoaded) {
+            moviesList.clear();
+            moviesList.addAll(favouriteMovies);
+            moviesAdapter.updateData(moviesList);
+            if (((MoviesActivity) getActivity()).isTwoPaneContainer()) {
+                onMovieSelectListener.onMovieSelected(null, moviesList.get(0));
+            }
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+    }
 
     public interface OnMovieSelectListener {
         void onMovieSelected(View v, Result item);
@@ -128,7 +158,7 @@ public class MoviesFragment extends Fragment implements AppConstants {
                 isFavoriteMoviesLoaded = true;
                 moviesList.clear();
                 ((MoviesActivity) getActivity()).setToolbarTitle(getString(R.string.favorite_movies));
-                moviesList.addAll(FavoriteMoviesManager.create(getActivity()).getAllFavoriteMovies());
+                moviesList.addAll(favouriteMovies);
                 moviesAdapter.updateData(moviesList);
                 if (((MoviesActivity) getActivity()).isTwoPaneContainer()) {
                     onMovieSelectListener.onMovieSelected(null, moviesList.get(0));
@@ -182,6 +212,7 @@ public class MoviesFragment extends Fragment implements AppConstants {
         initListeners();
         initObjects();
         getMoviesData(pageNumber);
+        getActivity().getSupportLoaderManager().initLoader(1, null, this);
     }
 
     /**

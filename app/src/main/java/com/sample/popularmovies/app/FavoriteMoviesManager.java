@@ -50,10 +50,12 @@ public class FavoriteMoviesManager {
         values.put(MoviesContract.MovieEntry.COLUMN_POSTER_URL, movie.getPosterPath());
         values.put(MoviesContract.MovieEntry.COLUMN_BACKDROP_URL, movie.getBackdropPath());
         mContentResolver.insert(MoviesContract.MovieEntry.CONTENT_URI, values);
+        mContentResolver.notifyChange(MoviesContract.MovieEntry.CONTENT_URI, null);
     }
 
     public void remove(Result movie) {
         mContentResolver.delete(MoviesContract.MovieEntry.CONTENT_URI, MoviesContract.MovieEntry.COLUMN_ID + " = " + movie.getId(), null);
+        mContentResolver.notifyChange(MoviesContract.MovieEntry.CONTENT_URI, null);
     }
 
     public boolean isFavorite(Result movie) {
@@ -101,6 +103,29 @@ public class FavoriteMoviesManager {
             if (cursor != null) {
                 cursor.close();
             }
+        }
+        return movies;
+    }
+
+    public List<Result> getAllFavoriteMovies(Cursor cursor) {
+        List<Result> movies = new ArrayList<>();
+        try {
+            if (cursor != null) {
+                while (cursor.moveToNext()) {
+                    Result movie = new Result();
+                    movie.setOriginalTitle(cursor.getString(cursor.getColumnIndex(MoviesContract.MovieEntry.COLUMN_TITLE)));
+                    movie.setVoteAverage(cursor.getDouble(cursor.getColumnIndex(MoviesContract.MovieEntry.COLUMN_RATING)));
+                    movie.setReleaseDate(cursor.getString(cursor.getColumnIndex(MoviesContract.MovieEntry.COLUMN_RELEASE_DATE)));
+                    movie.setOverview(cursor.getString(cursor.getColumnIndex(MoviesContract.MovieEntry.COLUMN_PLOT)));
+                    movie.setPosterPath(cursor.getString(cursor.getColumnIndex(MoviesContract.MovieEntry.COLUMN_POSTER_URL)));
+                    movie.setBackdropPath(cursor.getString(cursor.getColumnIndex(MoviesContract.MovieEntry.COLUMN_BACKDROP_URL)));
+                    movie.setId(cursor.getInt(cursor.getColumnIndex(MoviesContract.MovieEntry.COLUMN_ID)));
+                    movies.add(movie);
+                }
+            }
+            Collections.reverse(movies);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return movies;
     }

@@ -48,13 +48,18 @@ public class MoviesContentProvider extends ContentProvider {
         // FIXME: fix the selection parameter
         final String singleMovieQuerySelection = MovieEntry.TABLE_NAME + "." + MovieEntry.COLUMN_ID + " = " + extractMovieId(uri);
         int match = mUriMatcher.match(uri);
+        Cursor cursor = null;
         switch (match) {
             case CODE_MOVIE:
                 Log.v(TAG, "matched for a single movie with id: " + extractMovieId(uri));
-                return sQueryBuilder.query(mMoviesDBHelper.getReadableDatabase(), null, singleMovieQuerySelection, new String[]{}, null, null, null);
+                cursor = sQueryBuilder.query(mMoviesDBHelper.getReadableDatabase(), null, singleMovieQuerySelection, new String[]{}, null, null, null);
+                cursor.setNotificationUri(getContext().getContentResolver(), uri);
+                return cursor;
             case CODE_MOVIES:
                 Log.v(TAG, "matched for a all movies");
-                return sQueryBuilder.query(mMoviesDBHelper.getReadableDatabase(), null, null, null, null, null, null);
+                cursor = sQueryBuilder.query(mMoviesDBHelper.getReadableDatabase(), null, null, null, null, null, null);
+                cursor.setNotificationUri(getContext().getContentResolver(), uri);
+                return cursor;
             default:
                 Log.w(TAG, "No match found for uri: " + uri);
                 return null;
