@@ -23,4 +23,5 @@ public class NetworkService {
     public RestInterface getRestInterface() {
         return restInterface;
     }
+
 }

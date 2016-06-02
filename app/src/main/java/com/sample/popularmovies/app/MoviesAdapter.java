@@ -45,7 +45,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
         public LoadingViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.bind(mContext, itemView);
+            ButterKnife.bind(this, itemView);
         }
     }
 

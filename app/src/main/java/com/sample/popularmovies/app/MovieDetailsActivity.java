@@ -56,7 +56,7 @@ public class MovieDetailsActivity extends BaseActivity implements MovieDetailsFr
             movieDetailsFragment = new MovieDetailsFragment();
             Bundle bundle = new Bundle();
             movieDetailsFragment.setArguments(bundle);
-            bundle.putSerializable(IBundleParams.RESULT_OBJ, getIntent().getSerializableExtra(IBundleParams.RESULT_OBJ));
+            bundle.putParcelable(IBundleParams.RESULT_OBJ, getIntent().getParcelableExtra(IBundleParams.RESULT_OBJ));
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.movie_details_container, movieDetailsFragment)
                     .commit();
@@ -69,7 +69,7 @@ public class MovieDetailsActivity extends BaseActivity implements MovieDetailsFr
     }
 
     void setDataToViews() {
-        movie = (Result) getIntent().getSerializableExtra(IBundleParams.RESULT_OBJ);
+        movie = (Result) getIntent().getParcelableExtra(IBundleParams.RESULT_OBJ);
         if (favoriteMoviesManager.isFavorite(movie)) {
             updateFavouriteFab(true);
         }
@@ -114,6 +114,9 @@ public class MovieDetailsActivity extends BaseActivity implements MovieDetailsFr
                         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube://" + youTubeVideoId));
                         startActivity(intent);
                     } catch (ActivityNotFoundException ex) {
+                        // launch default browser if youtube app is not installed in device
+                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(" https://www.youtube.com/watch?v=" + youTubeVideoId));
+                        startActivity(browserIntent);
                         ex.printStackTrace();
                     }
                 }

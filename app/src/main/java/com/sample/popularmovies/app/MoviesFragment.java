@@ -1,6 +1,7 @@
 package com.sample.popularmovies.app;
 
 import android.app.Activity;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -27,6 +28,7 @@ import com.sample.popularmovies.services.databases.MoviesContract;
 import com.sample.popularmovies.services.models.movieapi.Movies;
 import com.sample.popularmovies.services.models.movieapi.Result;
 import com.sample.popularmovies.utils.AppConstants;
+import com.sample.popularmovies.utils.NetworkStateReceiver;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +42,7 @@ import retrofit.client.Response;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MoviesFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, AppConstants {
+public class MoviesFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, AppConstants, NetworkStateReceiver.NetworkStateReceiverListener {
 
     private int visibleThreshold = 5;
     private int lastVisibleItem;
@@ -58,11 +60,21 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
     private String POPULAR_MOVIES = "popular";
     private String TOP_RATED_MOVIES = "top_rated";
     private String SORT_BY = POPULAR_MOVIES;
+    private String titleName;
 
     private List<Result> moviesList = new ArrayList<>();
+
     private OnMovieSelectListener onMovieSelectListener;
     private boolean isFavoriteMoviesLoaded = false;
     private List<Result> favouriteMovies = null;
+    private NetworkStateReceiver networkStateReceiver;
+
+    // To save the instances when orientation change
+    private String SORTED_VALUE_KEY = "sortby";
+    private String SCREEN_TITLE = "screen_title";
+
+    private boolean isNetworkFailure = false;
+
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -85,6 +97,17 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
+    }
+
+    @Override
+    public void onNetworkAvailable() {
+        if (isNetworkFailure) {
+            getMoviesData(pageNumber);
+        }
+    }
+
+    @Override
+    public void onNetworkUnavailable() {
     }
 
     public interface OnMovieSelectListener {
@@ -111,7 +134,7 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
 
     OnLoadMoreListener onLoadMoreListener = new OnLoadMoreListener() {
         @Override
-        public void onLoadMore(int pageNumber) {
+        public void onLoadMore(int pNumber) {
             if (!isFavoriteMoviesLoaded) {
                 handler.post(new Runnable() {
                     @Override
@@ -122,16 +145,38 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
                         }
                     }
                 });
-
+                pageNumber = pNumber;
                 getMoviesData(pageNumber);
             }
         }
     };
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(SORTED_VALUE_KEY, SORT_BY);
+        outState.putString(SCREEN_TITLE, ((MoviesActivity) getActivity()).getToolbarTitle());
+    }
+
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        networkStateReceiver = new NetworkStateReceiver(getActivity());
+        networkStateReceiver.addListener(this);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getActivity().registerReceiver(networkStateReceiver, new IntentFilter(android.net.ConnectivityManager.CONNECTIVITY_ACTION));
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        getActivity().unregisterReceiver(networkStateReceiver);
     }
 
     @Override
@@ -146,20 +191,20 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
         switch (item.getItemId()) {
             case R.id.action_popular_movies:
                 SORT_BY = POPULAR_MOVIES;
-                ((MoviesActivity) getActivity()).setToolbarTitle(getString(R.string.popular_movies));
+                setToolbarTitle(getString(R.string.popular_movies));
                 resetMoviesData();
                 break;
 
             case R.id.action_top_rated_movies:
                 SORT_BY = TOP_RATED_MOVIES;
-                ((MoviesActivity) getActivity()).setToolbarTitle(getString(R.string.top_rated_movies));
+                setToolbarTitle(getString(R.string.top_rated_movies));
                 resetMoviesData();
                 break;
 
             case R.id.action_favorite_movies:
                 isFavoriteMoviesLoaded = true;
                 moviesList.clear();
-                ((MoviesActivity) getActivity()).setToolbarTitle(getString(R.string.favorite_movies));
+                setToolbarTitle(getString(R.string.favorite_movies));
                 moviesList.addAll(favouriteMovies);
                 moviesAdapter.updateData(moviesList);
                 if (((MoviesActivity) getActivity()).isTwoPaneContainer()) {
@@ -168,8 +213,16 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
                 break;
 
         }
-
         return true;
+    }
+
+    /**
+     * Set Toolbar Title
+     *
+     * @param title
+     */
+    private void setToolbarTitle(String title) {
+        ((MoviesActivity) getActivity()).setToolbarTitle(title);
     }
 
     /**
@@ -184,6 +237,10 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            SORT_BY = savedInstanceState.getString(SORTED_VALUE_KEY);
+            titleName = savedInstanceState.getString(SCREEN_TITLE);
+        }
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.fragment_movies, container, false);
             init();
@@ -248,6 +305,7 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
      * @param pageNumber - pagination
      */
     private void getMoviesData(final int pageNumber) {
+        isNetworkFailure = false;
         RestInterface restInterface = PopularMoviesApplication.getInstance().getNetworkService().getRestInterface();
         restInterface.getPopularMovies(SORT_BY, pageNumber, new Callback<Movies>() {
             @Override
@@ -268,7 +326,8 @@ public class MoviesFragment extends Fragment implements LoaderManager.LoaderCall
 
             @Override
             public void failure(RetrofitError error) {
-                ((BaseActivity) getActivity()).showToast(error.getMessage());
+                isNetworkFailure = true;
+                ((BaseActivity) getActivity()).showToast(getString(R.string.no_internet_connection));
             }
         });
     }

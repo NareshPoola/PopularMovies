@@ -3,6 +3,7 @@ package com.sample.popularmovies.app;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
@@ -13,8 +14,6 @@ import android.widget.TextView;
 
 import com.sample.popularmovies.R;
 import com.sample.popularmovies.services.models.movieapi.Result;
-
-import java.io.Serializable;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,7 +37,7 @@ public class MoviesActivity extends BaseActivity implements MoviesFragment.OnMov
         setContentView(R.layout.activity_movies);
         ButterKnife.bind(this);
         setSupportActionBar(mToolbar);
-        isTwoPane = findViewById(R.id.movie_details_container)!=null;
+        isTwoPane = findViewById(R.id.movie_details_container) != null;
     }
 
     /**
@@ -50,17 +49,22 @@ public class MoviesActivity extends BaseActivity implements MoviesFragment.OnMov
         mToolbarTitle.setText(title);
     }
 
+
+    public String getToolbarTitle() {
+        return mToolbarTitle.getText().toString();
+    }
+
     @Override
     public void onMovieSelected(View v, Result item) {
         String transitionName = getString(R.string.transition_string);
-         ImageView viewStart = null;
-        if(v!=null) {
+        ImageView viewStart = null;
+        if (v != null) {
             viewStart = (ImageView) v.findViewById(R.id.movie_image);
         }
-        if(!isTwoPane) {
+        if (!isTwoPane) {
             Intent intent = new Intent(this, MovieDetailsActivity.class);
-            intent.putExtra(IBundleParams.RESULT_OBJ, (Serializable) item);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            intent.putExtra(IBundleParams.RESULT_OBJ, (Parcelable) item);
+            if (viewStart != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 ActivityOptionsCompat options =
 
                         ActivityOptionsCompat.makeSceneTransitionAnimation(this,
@@ -71,20 +75,19 @@ public class MoviesActivity extends BaseActivity implements MoviesFragment.OnMov
             } else {
                 startActivity(intent);
             }
-        }else{
+        } else {
             MovieDetailsFragment movieDetailsFragment = new MovieDetailsFragment();
             Bundle bundle = new Bundle();
-            bundle.putSerializable(IBundleParams.RESULT_OBJ, (Serializable) item);
+            bundle.putParcelable(IBundleParams.RESULT_OBJ, (Parcelable) item);
             movieDetailsFragment.setArguments(bundle);
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.movie_details_container, movieDetailsFragment)
-                    .addSharedElement(viewStart, transitionName)
                     .commit();
         }
 
     }
 
-    public boolean isTwoPaneContainer(){
+    public boolean isTwoPaneContainer() {
         return isTwoPane;
     }
 }

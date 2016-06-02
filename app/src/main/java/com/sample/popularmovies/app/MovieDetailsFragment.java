@@ -4,9 +4,12 @@ import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
@@ -31,10 +34,9 @@ import com.sample.popularmovies.services.models.reviewapi.Reviews;
 import com.sample.popularmovies.services.models.videoapi.Videos;
 import com.sample.popularmovies.utils.AppConstants;
 import com.sample.popularmovies.utils.AppUtils;
+import com.sample.popularmovies.utils.NetworkStateReceiver;
 import com.sample.popularmovies.utils.TMDBUtils;
 import com.squareup.picasso.Picasso;
-
-import java.io.Serializable;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -46,7 +48,7 @@ import retrofit.client.Response;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MovieDetailsFragment extends Fragment implements AppConstants {
+public class MovieDetailsFragment extends Fragment implements AppConstants, NetworkStateReceiver.NetworkStateReceiverListener {
 
     private View rootView;
     @BindView(R.id.movie_image)
@@ -79,6 +81,28 @@ public class MovieDetailsFragment extends Fragment implements AppConstants {
     LinearLayoutManager linearLayoutManager;
     private MovieTrailersAdapter movieTrailersAdapter;
     private FavoriteMoviesManager favoriteMoviesManager;
+    private NetworkStateReceiver networkStateReceiver;
+    private boolean isNetworkFailure = false;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        networkStateReceiver = new NetworkStateReceiver(getActivity());
+        networkStateReceiver.addListener(this);
+    }
+
+    @Override
+    public void onNetworkAvailable() {
+        if (isNetworkFailure) {
+            getMovieTrailers();
+            getMovieReviews();
+        }
+    }
+
+    @Override
+    public void onNetworkUnavailable() {
+
+    }
 
     public interface OnVideoSelectListener {
         void onVideoSelected(View v, com.sample.popularmovies.services.models.videoapi.Result item);
@@ -91,10 +115,27 @@ public class MovieDetailsFragment extends Fragment implements AppConstants {
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube://" + item.getKey()));
                 startActivity(intent);
             } catch (ActivityNotFoundException ex) {
+                // launch default browser if youtube app is not installed in device
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(" https://www.youtube.com/watch?v=" + youTubeVideoId));
+                startActivity(browserIntent);
                 ex.printStackTrace();
             }
         }
     };
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getActivity().registerReceiver(networkStateReceiver, new IntentFilter(android.net.ConnectivityManager.CONNECTIVITY_ACTION));
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        getActivity().unregisterReceiver(networkStateReceiver);
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -139,7 +180,7 @@ public class MovieDetailsFragment extends Fragment implements AppConstants {
 
     void setDataToViews() {
         Bundle bundle = getArguments();
-        movie = (Result) bundle.getSerializable(IBundleParams.RESULT_OBJ);
+        movie = (Result) bundle.getParcelable(IBundleParams.RESULT_OBJ);
         mMovieReleasedDate.setText(getString(R.string.format_release_date, AppUtils.formateDate(movie.getReleaseDate())));
         mMovieVoteAvg.setText(getString(R.string.format_vote_avg, String.valueOf(movie.getVoteAverage())));
         mMovieOverView.setText(movie.getOverview());
@@ -157,6 +198,7 @@ public class MovieDetailsFragment extends Fragment implements AppConstants {
     }
 
     void getMovieTrailers() {
+        isNetworkFailure = false;
         RestInterface restInterface = PopularMoviesApplication.getInstance().getNetworkService().getRestInterface();
         restInterface.getMovieTrailers(movie.getId(), new Callback<Videos>() {
             @Override
@@ -179,12 +221,13 @@ public class MovieDetailsFragment extends Fragment implements AppConstants {
 
             @Override
             public void failure(RetrofitError error) {
-                ((BaseActivity) getActivity()).showToast(error.getMessage());
+                isNetworkFailure = true;
             }
         });
     }
 
     void getMovieReviews() {
+        isNetworkFailure = false;
         RestInterface restInterface = PopularMoviesApplication.getInstance().getNetworkService().getRestInterface();
         restInterface.getMovieReviews(movie.getId(), new Callback<Reviews>() {
             @Override
@@ -211,7 +254,7 @@ public class MovieDetailsFragment extends Fragment implements AppConstants {
 
             @Override
             public void failure(RetrofitError error) {
-                ((BaseActivity) getActivity()).showToast(error.getMessage());
+                isNetworkFailure = true;
             }
         });
     }
@@ -224,7 +267,9 @@ public class MovieDetailsFragment extends Fragment implements AppConstants {
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube://" + youTubeVideoId));
                 startActivity(intent);
             } catch (ActivityNotFoundException ex) {
-                ex.printStackTrace();
+                // launch default browser if youtube app is not installed in device
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(" https://www.youtube.com/watch?v=" + youTubeVideoId));
+                startActivity(browserIntent);
             }
         }
     }
@@ -247,9 +292,9 @@ public class MovieDetailsFragment extends Fragment implements AppConstants {
         public void onClick(View v) {
             com.sample.popularmovies.services.models.reviewapi.Result result = (com.sample.popularmovies.services.models.reviewapi.Result) v.getTag();
             Intent intent = new Intent(getActivity(), ReviewDetailsActivity.class);
-            intent.putExtra(IBundleParams.RESULT_OBJ, (Serializable) result);
-            View name =  v.findViewById(R.id.reviewer_name);
-            View desc =  v.findViewById(R.id.review_description);
+            intent.putExtra(IBundleParams.RESULT_OBJ, (Parcelable) result);
+            View name = v.findViewById(R.id.reviewer_name);
+            View desc = v.findViewById(R.id.review_description);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 Pair<View, String> pair1 = Pair.create(name, name.getTransitionName());
                 Pair<View, String> pair2 = Pair.create(desc, desc.getTransitionName());

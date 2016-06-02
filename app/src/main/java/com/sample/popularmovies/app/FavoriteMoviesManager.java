@@ -27,9 +27,11 @@ public class FavoriteMoviesManager {
 
     private final ContentResolver mContentResolver;
 
+    private final ContentAsyncQueryHandler contentAsyncQueryHandler;
 
     private FavoriteMoviesManager(Context context) {
         mContentResolver = context.getContentResolver();
+        contentAsyncQueryHandler = new ContentAsyncQueryHandler(mContentResolver);
     }
 
     public static FavoriteMoviesManager create(Context context) {
@@ -40,7 +42,6 @@ public class FavoriteMoviesManager {
     }
 
     public void add(Result movie) {
-
         ContentValues values = new ContentValues();
         values.put(MoviesContract.MovieEntry.COLUMN_ID, movie.getId());
         values.put(MoviesContract.MovieEntry.COLUMN_TITLE, movie.getOriginalTitle());
@@ -49,13 +50,11 @@ public class FavoriteMoviesManager {
         values.put(MoviesContract.MovieEntry.COLUMN_PLOT, movie.getOverview());
         values.put(MoviesContract.MovieEntry.COLUMN_POSTER_URL, movie.getPosterPath());
         values.put(MoviesContract.MovieEntry.COLUMN_BACKDROP_URL, movie.getBackdropPath());
-        mContentResolver.insert(MoviesContract.MovieEntry.CONTENT_URI, values);
-        mContentResolver.notifyChange(MoviesContract.MovieEntry.CONTENT_URI, null);
+        contentAsyncQueryHandler.startInsert(1, null, MoviesContract.MovieEntry.CONTENT_URI, values);
     }
 
     public void remove(Result movie) {
-        mContentResolver.delete(MoviesContract.MovieEntry.CONTENT_URI, MoviesContract.MovieEntry.COLUMN_ID + " = " + movie.getId(), null);
-        mContentResolver.notifyChange(MoviesContract.MovieEntry.CONTENT_URI, null);
+        contentAsyncQueryHandler.startDelete(1, null,MoviesContract.MovieEntry.CONTENT_URI, MoviesContract.MovieEntry.COLUMN_ID + " = " + movie.getId(), null);
     }
 
     public boolean isFavorite(Result movie) {
@@ -76,35 +75,6 @@ public class FavoriteMoviesManager {
             }
         }
         return false;
-    }
-
-    public List<Result> getAllFavoriteMovies() {
-        Cursor cursor = mContentResolver.query(MoviesContract.MovieEntry.CONTENT_URI, null, null, null, null);
-        List<Result> movies = new ArrayList<>();
-        try {
-            if (cursor != null) {
-                while (cursor.moveToNext()) {
-                    Result movie = new Result();
-                    movie.setOriginalTitle(cursor.getString(cursor.getColumnIndex(MoviesContract.MovieEntry.COLUMN_TITLE)));
-                    movie.setVoteAverage(cursor.getDouble(cursor.getColumnIndex(MoviesContract.MovieEntry.COLUMN_RATING)));
-                    movie.setReleaseDate(cursor.getString(cursor.getColumnIndex(MoviesContract.MovieEntry.COLUMN_RELEASE_DATE)));
-                    movie.setOverview(cursor.getString(cursor.getColumnIndex(MoviesContract.MovieEntry.COLUMN_PLOT)));
-                    movie.setPosterPath(cursor.getString(cursor.getColumnIndex(MoviesContract.MovieEntry.COLUMN_POSTER_URL)));
-                    movie.setBackdropPath(cursor.getString(cursor.getColumnIndex(MoviesContract.MovieEntry.COLUMN_BACKDROP_URL)));
-                    movie.setId(cursor.getInt(cursor.getColumnIndex(MoviesContract.MovieEntry.COLUMN_ID)));
-                    movies.add(movie);
-                }
-            }
-            Collections.reverse(movies);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            //always close your curser to avoid memory leaks.
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-        return movies;
     }
 
     public List<Result> getAllFavoriteMovies(Cursor cursor) {

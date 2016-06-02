@@ -2,8 +2,6 @@
 package com.sample.popularmovies.services.models.videoapi;
 
 
-import android.support.annotation.NonNull;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -146,7 +144,6 @@ public class Result {
     public void setType(String type) {
         this.type = type;
     }
-
 
 
 }
