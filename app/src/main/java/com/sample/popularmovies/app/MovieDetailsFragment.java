@@ -116,13 +116,19 @@ public class MovieDetailsFragment extends Fragment implements AppConstants, Netw
                 startActivity(intent);
             } catch (ActivityNotFoundException ex) {
                 // launch default browser if youtube app is not installed in device
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(" https://www.youtube.com/watch?v=" + youTubeVideoId));
-                startActivity(browserIntent);
-                ex.printStackTrace();
+                openInDefaultBrowser();
             }
         }
     };
 
+    private void openInDefaultBrowser() {
+        try {
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(" https://www.youtube.com/watch?v=" + youTubeVideoId));
+            startActivity(browserIntent);
+        } catch (ActivityNotFoundException ex) {
+            ex.printStackTrace();
+        }
+    }
 
     @Override
     public void onResume() {
@@ -268,8 +274,7 @@ public class MovieDetailsFragment extends Fragment implements AppConstants, Netw
                 startActivity(intent);
             } catch (ActivityNotFoundException ex) {
                 // launch default browser if youtube app is not installed in device
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(" https://www.youtube.com/watch?v=" + youTubeVideoId));
-                startActivity(browserIntent);
+                openInDefaultBrowser();
             }
         }
     }

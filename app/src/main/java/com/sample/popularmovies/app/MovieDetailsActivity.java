@@ -115,9 +115,7 @@ public class MovieDetailsActivity extends BaseActivity implements MovieDetailsFr
                         startActivity(intent);
                     } catch (ActivityNotFoundException ex) {
                         // launch default browser if youtube app is not installed in device
-                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(" https://www.youtube.com/watch?v=" + youTubeVideoId));
-                        startActivity(browserIntent);
-                        ex.printStackTrace();
+                        openInDefaultBrowser();
                     }
                 }
                 break;
@@ -132,6 +130,15 @@ public class MovieDetailsActivity extends BaseActivity implements MovieDetailsFr
                     updateFavouriteFab(true);
                 }
                 break;
+        }
+    }
+
+    private void openInDefaultBrowser() {
+        try {
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(" https://www.youtube.com/watch?v=" + youTubeVideoId));
+            startActivity(browserIntent);
+        } catch (ActivityNotFoundException ex) {
+            ex.printStackTrace();
         }
     }
 
